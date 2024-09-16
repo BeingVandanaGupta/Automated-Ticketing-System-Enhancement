@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticketing System Dashboard - Vandana Gupta</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Dashboard Header */
+        .dashboard-header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: left;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 100px auto 0;
+            display: flex;
+        }
+
+        /* Left side menu */
+        .left-menu {
+            width: 250px;
+            background-color: #fff;
+            padding: 20px;
+            border-right: 1px solid #ddd;
+        }
+
+        .left-menu h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            background-color: #f1f1f1;
+        }
+
+        .menu-item i {
+            font-size: 18px;
+            margin-right: 10px;
+            color: #007bff;
+        }
+
+        .menu-item span {
+            font-size: 16px;
+        }
+
+        /* Main dashboard content */
+        .main-dashboard {
+            flex: 1;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .block-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-block {
+            background-color: #f9f9f9;
+            width: 23%;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .dashboard-block h3 {
+            font-size: 22px;
+            color: #333;
+        }
+
+        .dashboard-block p {
+            font-size: 18px;
+            color: #007bff;
+            margin-top: 10px;
+        }
+
+        .dashboard-block:hover {
+            background-color: #e0e0e0;
+        }
+
+        .ticket-form {
+            margin-bottom: 30px;
+        }
+
+        .ticket-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .ticket-form input, .ticket-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .ticket-form button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .ticket-form button:hover {
+            background-color: #218838;
+        }
+
+        .ticket-board {
+            display: none;
+            margin-top: 30px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .ticket-board h3 {
+            margin: 0;
+        }
+
+        .ticket-board ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .ticket-board ul li {
+            padding: 8px;
+            background-color: #fff;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <h1>Vandana Gupta Profile</h1>
+    </div>
+
+    <div class="container">
+        <!-- Left Menu -->
+        <div class="left-menu">
+            <h3>Ticket Stats</h3>
+            <div class="menu-item" onclick="showTicketType('badRated')">
+                <i class="fas fa-thumbs-down"></i>
+                <span>Bad Rated Tickets</span>
+            </div>
+            <div class="menu-item" onclick="showTicketType('goodRated')">
+                <i class="fas fa-thumbs-up"></i>
+                <span>Good Rated Tickets</span>
+            </div>
+            <div class="menu-item" onclick="showTicketType('pending')">
+                <i class="fas fa-hourglass-half"></i>
+                <span>Pending Tickets</span>
+            </div>
+            <div class="menu-item" onclick="showTicketType('all')">
+                <i class="fas fa-tasks"></i>
+                <span>All Tickets</span>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div class="main-dashboard">
+            <!-- Ticket Summary Blocks -->
+            <div class="block-row">
+                <div class="dashboard-block" onclick="openTicket('open')">
+                    <h3>Open Tickets</h3>
+                    <p id="openTickets">1</p>
+                </div>
+                <div class="dashboard-block" onclick="openTicket('submitted')">
+                    <h3>Submitted Tickets</h3>
+                    <p id="submittedTickets">1</p>
+                </div>
+                <div class="dashboard-block" onclick="openTicket('pending')">
+                    <h3>Pending Tickets</h3>
+                    <p id="pendingTickets">0</p>
+                </div>
+                <div class="dashboard-block" onclick="openTicket('solved')">
+                    <h3>Solved Tickets</h3>
+                    <p id="solvedTickets">0</p>
+                </div>
+            </div>
+
+            <!-- Ticket Creation Form -->
+            <div class="ticket-form">
+                <h2>Create a New Ticket</h2>
+                <label for="name">Name</label>
+                <input type="text" id="name" placeholder="Enter your name" required>
+
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+
+                <label for="issue">Issue Description</label>
+                <textarea id="issue" placeholder="Describe your issue" required></textarea>
+
+                <button onclick="createTicket()">Submit Ticket</button>
+            </div>
+
+            <!-- Ticket Details Board -->
+            <div class="ticket-board" id="ticketBoard">
+                <h3>Ticket #<span id="ticketNumber"></span> Tasks</h3>
+                <ul id="taskList">
+                    <li>Investigate the issue</li>
+                    <li>Contact the user</li>
+                    <li>Provide troubleshooting steps</li>
+                    <li>Mark the ticket as resolved</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        let openTicketsCount = 1;
+        let submittedTicketsCount = 1;
+        let pendingTicketsCount = 0;
+        let solvedTicketsCount = 0;
+
+        function openTicket(type) {
+            let board = document.getElementById("ticketBoard");
+            let ticketNum = document.getElementById("ticketNumber");
+            let taskList = document.getElementById("taskList");
+
+            board.style.display = "block";
+
+            if (type === 'open') {
+                ticketNum.innerText = 1;
+                taskList.innerHTML = `
+                    <li>Investigate the issue</li>
+                    <li>Contact the user</li>
+                    <li>Provide troubleshooting steps</li>
+                    <li>Mark the ticket as resolved</li>
+                `;
+            }
+        }
+
+        function createTicket() {
+            openTicketsCount++;
+            document.getElementById('openTickets').innerText = openTicketsCount;
+        }
+
+        function showTicketType(type) {
+            alert("Showing " + type + " tickets.");
+        }
+    </script>
+</body>
+</html>
